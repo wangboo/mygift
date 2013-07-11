@@ -5,6 +5,6 @@ load $app_path + "service/service_init.rb"
 require 'sinatra'
 
 get("/login") do
-  Mygift::Login.login params
+  Mygift::Account.regist params
 end
 

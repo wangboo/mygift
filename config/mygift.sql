@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50611
 File Encoding         : 65001
 
-Date: 2013-07-12 00:12:57
+Date: 2013-07-12 00:54:20
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -43,6 +43,7 @@ CREATE TABLE `news` (
   `bigIcon` varchar(256) COLLATE utf8_bin DEFAULT NULL,
   `smallIcon` varchar(256) COLLATE utf8_bin DEFAULT NULL,
   `abs` varchar(256) COLLATE utf8_bin DEFAULT NULL COMMENT '摘要',
+  `is_push` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -100,8 +101,10 @@ CREATE TABLE `users` (
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `level` int(11) NOT NULL DEFAULT '1',
   `nickname` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  `pushed_id` int(11) NOT NULL DEFAULT '0',
+  `is_guest` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of users

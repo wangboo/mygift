@@ -1,6 +1,6 @@
 #encoding: utf-8
 module Mygift
-  class Account
+  class AccService
     class << self
       include Mygift::Utils
       
@@ -25,6 +25,7 @@ module Mygift
           user.phone = phone
           user.save!
         end
+        success
       end
       
       def logout params
@@ -62,6 +63,7 @@ module Mygift
         user.push_flag = params[:push_flag] if params[:push_flag]
         user.nick = params[:nick]
         user.create_time = Time.current
+        success
       end
         
       

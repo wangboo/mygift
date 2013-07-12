@@ -3,6 +3,6 @@ encoding: utf8
 database: mygift 
 reconnect: false
 username: root
-password: 
+password: root
 host: 127.0.0.1
 pool: 10 

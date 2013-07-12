@@ -1,38 +1,25 @@
 /*
-Navicat MySQL Data Transfer
-
-Source Server         : localhost
-Source Server Version : 50611
-Source Host           : localhost:3306
-Source Database       : mygift
-
-Target Server Type    : MYSQL
-Target Server Version : 50611
-File Encoding         : 65001
-
-Date: 2013-07-12 00:54:20
+MySQL Data Transfer
+Source Host: localhost
+Source Database: mygift
+Target Host: localhost
+Target Database: mygift
+Date: 2013-7-12 16:40:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
 -- ----------------------------
--- Table structure for `cats`
+-- Table structure for cats
 -- ----------------------------
-DROP TABLE IF EXISTS `cats`;
 CREATE TABLE `cats` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
--- Records of cats
+-- Table structure for news
 -- ----------------------------
-
--- ----------------------------
--- Table structure for `news`
--- ----------------------------
-DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(256) COLLATE utf8_bin NOT NULL,
@@ -48,13 +35,8 @@ CREATE TABLE `news` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
--- Records of news
+-- Table structure for notes
 -- ----------------------------
-
--- ----------------------------
--- Table structure for `notes`
--- ----------------------------
-DROP TABLE IF EXISTS `notes`;
 CREATE TABLE `notes` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -66,13 +48,8 @@ CREATE TABLE `notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
--- Records of notes
+-- Table structure for photos
 -- ----------------------------
-
--- ----------------------------
--- Table structure for `photos`
--- ----------------------------
-DROP TABLE IF EXISTS `photos`;
 CREATE TABLE `photos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `news_id` int(11) DEFAULT NULL,
@@ -83,29 +60,41 @@ CREATE TABLE `photos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
--- Records of photos
+-- Table structure for tests
 -- ----------------------------
+CREATE TABLE `tests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `is_guest` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
--- Table structure for `users`
+-- Table structure for users
 -- ----------------------------
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user` varchar(255) COLLATE utf8_bin NOT NULL,
-  `pwd` varchar(255) COLLATE utf8_bin NOT NULL,
+  `user` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `pwd` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `email` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `icon` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `birthday` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `birthday` timestamp NULL DEFAULT NULL,
   `phone` varchar(16) COLLATE utf8_bin NOT NULL,
-  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `level` int(11) NOT NULL DEFAULT '1',
   `nickname` varchar(256) COLLATE utf8_bin DEFAULT NULL,
   `pushed_id` int(11) NOT NULL DEFAULT '0',
   `is_guest` int(11) NOT NULL DEFAULT '1',
+  `is_push` int(11) NOT NULL DEFAULT '1',
+  `is_online` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
--- Records of users
+-- Records 
 -- ----------------------------
+INSERT INTO `cats` VALUES ('1', '实事');
+INSERT INTO `cats` VALUES ('2', '娱乐');
+INSERT INTO `cats` VALUES ('3', '体育');
+INSERT INTO `cats` VALUES ('4', '校园');
+INSERT INTO `tests` VALUES ('1', '1');
+INSERT INTO `tests` VALUES ('2', '0');

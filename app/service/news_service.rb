@@ -31,7 +31,7 @@ module Mygift
           news_list << news.news_base
         end
         result[:news] = news_list
-        success :main => result
+        success result
       end
       
       #查询新闻种类
@@ -42,6 +42,15 @@ module Mygift
           list << [cat.id, cat.name]
         end
         success :cats => list
+      end
+      
+      #查询新闻详情
+      def info params
+        news_id = params[:captures].first
+        one_news = News.find_by_id news_id
+        return error("第#{news_id}新闻没有找到") unless one_news
+        hash = one_news.news_info
+        hash.to_json
       end
       
     end

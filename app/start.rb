@@ -22,25 +22,38 @@ get("/account/push_set") do
 end
 
 #获取新闻大类
-post("/news/cats") do
+post("/cats") do
   Mygift::NewsService.cats
 end
 
 #获取新闻首页内容
-post(%r{/news/(\d+)/main}) do
+post(%r{/cats/(\d+)/main}) do
   Mygift::NewsService.main params
 end
+#获取新闻内容
+post(%r{/news/(\d+)/info}) do
+  Mygift::NewsService.info params
+end
 
+
+#广告服务
+post("/adv/main") do
+  Mygift::AdvService.main
+end
 
 
 #test-----------------------
 
-get("/news/cats") do
+get("/cats") do
   Mygift::NewsService.cats
 end
 
-get(%r{/news/(\d+)/main}) do
+get(%r{/cats/(\d+)/main}) do
   Mygift::NewsService.main params
+end
+
+get(%r{/news/(\d+)/info}) do
+  Mygift::NewsService.info params
 end
 
 post("/test") do
@@ -62,3 +75,7 @@ get("/test") do
   hash.to_json
 end
 
+#广告服务
+get("/adv/main") do
+  Mygift::AdvService.main
+end

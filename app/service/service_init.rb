@@ -23,6 +23,20 @@ module Mygift
       User.find_by_user params[:user]
     end
     
+    def save file
+      # tail =  "#{Time.now.to_i}.png"
+      # myfile = File.open("#{$app_path}/public/res/#{tail}", "w")
+      # size = file.size
+      # data = file.read size
+      # myfile.write data
+      # file.close
+      # myfile.flush
+      # myfile.close
+      # uploader = Uploader.new
+      # uploader.store! file
+      "11"
+    end
+    
     alias get_user find_user
   end
   

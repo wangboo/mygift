@@ -4,7 +4,9 @@
 # load $app_path + "/model/db_init.rb"
 # 
 # module Mygift
-        # count = User.find_by_phone("18618424604", ["is_guest=?", 0])
-        # puts count
+  # Cat.delete_all(["id=?", 1])
 # end
 
+$src_path = "1"
+puts $src_path + "2"
+puts $src_path

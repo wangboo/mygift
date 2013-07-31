@@ -1,4 +1,18 @@
+require 'carrierwave'
+require 'carrierwave/mount'
+require 'carrierwave/orm/activerecord'
 module Mygift
+  class Uploader < CarrierWave::Uploader::Base
+    def store_dir
+      'public/res/'
+    end
+    def filename
+      "#{Time.current.to_i}.png"
+    end
+    def default_url
+        "unknown"
+    end
+  end
   #新闻
   class News < ActiveRecord::Base
     
@@ -18,7 +32,11 @@ module Mygift
     def head_base
       hash = Hash.new
       hash[:id] = id
-      hash[:icon] = big_icon
+      if big_icon.is_a? Uploader
+        hash[:icon] = $res_path + big_icon.filename 
+      else
+        hash[:icon] = $res_path + big_icon
+      end
       hash[:title] = title
       hash[:time] = publish_time.to_i
       hash[:type] = news_type
@@ -29,11 +47,16 @@ module Mygift
     def news_base
       hash = Hash.new
       hash[:id] = id
-      hash[:icon] = small_icon
+      if small_icon.is_a? Uploader
+        puts "small_icon is a Uploader ,filename=#{small_icon.url}, #{small_icon}"
+        hash[:icon] = $res_path + small_icon.filename
+      else
+        hash[:icon] = $res_path + small_icon
+      end
       hash[:title] = title
       hash[:abs] = abstract
       hash[:time] = publish_time.to_i
-      hash[:mount] = Note.count(:conditions=>["id=?", id])
+      hash[:mount] = Note.count(:conditions=>["news_id=?", id])
       hash
     end
     
@@ -47,6 +70,13 @@ module Mygift
       hash[:come_from] = come_from
       hash[:type] = news_type
       hash[:abstract] = abstract
+      hash[:mount] = Note.count(:conditions=>["news_id=?", id])
+      if is_head
+        hash[:icon] = $res_path + big_icon
+      else
+        hash[:icon] = $res_path + small_icon
+      end
+      
       #查询出所有图片信息
       photos = Photo.find_by_news_id id, :order=>"id asc"
       return hash unless photos
@@ -58,5 +88,10 @@ module Mygift
       hash
     end
     
+  end
+  
+  class NewsUploader < News
+    mount_uploader :big_icon, Mygift::Uploader
+    mount_uploader :small_icon, Mygift::Uploader
   end
 end

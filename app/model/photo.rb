@@ -3,7 +3,7 @@ module Mygift
     
     #转换出新闻中图片的基本信息 hash
     def photo_info
-      {:icon=>icon, :title=>title}
+      {:icon=>$src_path + icon, :title=>title}
     end
     
   end

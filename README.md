@@ -22,3 +22,10 @@ birthday = long 非必输
 user
 pwd
 phone
+
+
+新闻类型：
+0 纯文本新闻
+1 文本带图片新闻
+2 图片集新闻
+3 广告

@@ -3,125 +3,64 @@ $app_path = Dir.pwd
 $pro_path = Dir.pwd.gsub(/(.*\/)/).first
 $res_path = "http://192.168.0.104:4567/res/"
 
-load $app_path + "/model/db_init.rb"
-load $app_path + "/service/service_init.rb"
+require "mongoid"
+require 'sinatra'
+require "./sinatra_addon.rb"
+require "./utils.rb"
+Dir.new("./model/").each do |file|
+  require "./model/" << file if file != '.' && file != ".."
+end
 
 ENV['RACK_ENV'] = "production"
-
-require 'sinatra'
+ENV['MONGOID_ENV'] = 'production'
+Mongoid.load!("../config/mongo_config.yml")
 enable :sessions
 
-post("/account/regist") do
-  Mygift::AccService.regist params
-end
-
-get("/account/login") do
-  Mygift::AccService.login params
-end
-
-get("/account/push_set") do
-  Mygift::AccService.push_set params
-end
-
-#获取新闻大类
-post("/cats") do
-  Mygift::NewsService.cats
-end
-
-#获取新闻首页内容
-post(%r{/cats/(\d+)}) do
-  Mygift::NewsService.main params
-end
-#获取新闻内容
-# post(%r{/news/(\d+)/info}) do
-  # Mygift::NewsService.info params
-# end
-
-
-#广告服务
-post("/adv/main") do
-  Mygift::AdvService.main
-end
-
-#web =========功能=====================
-
-
-get("/") do
-  erb :login
-end
-
-get("/web/main") do
-  erb :main
-end
-
-#主页
-post("/index") do
-  return erb :login unless Mygift::WebUser.find_by_user(params[:user], :conditions=>["pwd=?", params[:pwd]])
-  @cats = Mygift::Cat.all
-  erb :index
-end
-
-#增加种类
-get("/cats/insert") do 
-  cat_name = params[:name]
-  cat = Mygift::Cat.new
-  cat.name = cat_name
-  cat.save!
-  erb :main
-end
-
-get("/cats/delete") do 
-  Mygift::Cat.delete_all(["id=?", params[:id]])
-  erb :main
-end
-
-get("/web/select/") do
-  cats = Mygift::Cat.all
-  id = params[:id]
-  puts "select id=#{id}"
-  cats.each do |cat|
-    session[:select_cat_id] = cat.id if (cat.id.to_s == id)
-    puts "id=#{id}, find=#{session[:select_cat_id]}, cat.id=#{cat.id}"
+module Mygift
+  class App < Sinatra::Base
+    class << self
+      include Addon
+    end
+    include Utils
+    
+    attr_accessor :user
+    
+    add_server :adv
+    add_server :account
+    add_server :cat
+    add_server :news
+    
+    #拦截来自手机和网站的的请求
+    before do
+      @start_time = Time.now
+      path = request.path_info
+      return unless path.match(/^\/android\/.*$/)
+      puts "android用户 path=#{path}"
+      puts "params=#{params}"
+      #如果入参中包含c，并且c="android"则说明是android用户
+      if params.include? "p"
+        phone = params["p"]
+        all = User.where(:phone => phone)
+        #如果该用户不存在,注册
+        if all.size == 0
+          @user = User.create!(:phone => phone)
+        elsif all.size == 1
+          @user = all[0]
+        else
+          #有重复的账号出现，应该使用哪一个账号
+          puts "有重复的账号出现 phone = #{@user.phone}"
+          @user = all[0]
+        end
+      end
+    end
+    
+    after do
+      end_time = Time.now
+      puts "cost #{end_time - @start_time}s"
+      puts "---------------------------------------------"
+    end
+    
   end
-  erb :main
+  Rack::Handler::WEBrick.run App, :Port=>3000
 end
 
-#增加新闻
-post("/news/insert") do
-  Mygift::NewsService.insert params
-  erb :main
-end
-
-#test---------------------------------------------------------------------
-
-get("/cats") do
-  Mygift::NewsService.cats
-end
-
-get(%r{/cats/(\d+)}) do
-  Mygift::NewsService.main params
-end
-
-post("/test") do
-  hash = {}
-  hash[:int] = 1
-  hash[:float] = 1.3
-  hash[:string] = "string"
-  hash[:utf8] = "你好"
-  hash[:list] = ["l0", 'l1', {"a"=>"A"}, [1,2,3]]
-  hash.to_json
-end
-get("/test") do
-  hash = {}
-  hash[:int] = 1
-  hash[:float] = 1.3
-  hash[:string] = "string"
-  hash[:utf8] = "你好"
-  hash[:list] = ["l0", 'l1', {"a"=>"A"}, [1,2,3]]
-  hash.to_json
-end
-
-#广告服务
-get("/adv/main") do
-  Mygift::AdvService.main
-end

@@ -1,12 +1,16 @@
-# $app_path = Dir.pwd
-# $pro_path = Dir.pwd.gsub(/(.*\/)/).first
-# 
-# load $app_path + "/model/db_init.rb"
-# 
-# module Mygift
-  # Cat.delete_all(["id=?", 1])
-# end
-
-$src_path = "1"
-puts $src_path + "2"
-puts $src_path
+require "mongoid"
+Dir.new("./model/").each do |file|
+  require "./model/" << file if file != '.' && file != ".."
+end
+ENV['MONGOID_ENV'] = 'production'
+Mongoid.load!("../config/mongo_config.yml")
+module Mygift
+  #Adv.create!(icon: "adv0.jpg", title: "iphone8现已上市")
+  start = Time.now
+  User.all.each do |user|
+    puts user.phone
+  end
+  puts User.all.size
+  last = Time.now
+  puts "cost #{last-start}"
+end

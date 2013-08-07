@@ -1,6 +1,10 @@
+#encoding: utf-8
 module Mygift
   #新闻大类
-  class Cat < ActiveRecord::Base
-    
+  class Cat
+    include Mongoid::Document
+    field :name, :type => String
+    has_many :news
   end
+  
 end

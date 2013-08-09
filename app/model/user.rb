@@ -1,3 +1,4 @@
+#encoding: utf-8
 module Mygift
     #用户
   class User

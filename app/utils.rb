@@ -8,9 +8,9 @@ module Mygift
     #出口参数为：文件的相对路径/images/upload/.*\.\w+
     def save_file file
       suffix = file[:filename].match(/.*(\.\w+)/)[1]
-      save_file = "./public/images/upload/" + unique_id + suffix
+      save_file = "./public/upload/" + unique_id + suffix
       File.open(save_file, "wb") do |f|
-        f.write params[:file][:tempfile].read
+        f.write file[:tempfile].read
         f.close
       end
       save_file.gsub("./public", "")

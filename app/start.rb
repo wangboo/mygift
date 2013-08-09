@@ -30,11 +30,13 @@ module Mygift
     add_server :cat
     add_server :news
     
+    add_server :web
+    
     #拦截来自手机和网站的的请求
     before do
-      @start_time = Time.now
       path = request.path_info
       return unless path.match(/^\/android\/.*$/)
+      @start_time = Time.now
       puts "android用户 path=#{path}"
       puts "params=#{params}"
       #如果入参中包含c，并且c="android"则说明是android用户
@@ -55,9 +57,9 @@ module Mygift
     end
     
     after do
+      return unless @start_time
       end_time = Time.now
       puts "cost #{end_time - @start_time}s"
-      puts "---------------------------------------------"
     end
     
   end

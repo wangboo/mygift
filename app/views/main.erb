@@ -18,7 +18,79 @@
 <script type="text/javascript" src="/scripts/jquery.datePicker.js"></script>
 <script type="text/javascript" src="/scripts/jquery.date.js"></script>
 <script type="text/javascript">
-
+	var index = 0;
+	function add_item() {
+		index+=1
+		var ul = document.getElementById("type1_pics");
+		
+		var new_p = document.createElement("li");
+		new_p.id = "pic"+index;
+		
+		var new_file = document.createElement("input");
+		new_file.type = "file"
+		new_file.name = "pic_"+index;
+		
+		var new_content = document.createElement("input");
+		new_content.type = "text"
+		new_content.name = "content_"+index;
+		new_content.className = "text-input medium-input";
+		
+		var new_button = document.createElement("input");
+		new_button.type = "button";
+		new_button.className = "button";
+		new_button.onclick = Function("remove_item('pic"+index+"')");
+		new_button.value = "删除该条";
+		
+		new_p.appendChild(new_file);
+		new_p.appendChild(new_content);
+		new_p.appendChild(new_button);
+		
+		ul.appendChild(new_p);
+		return false;
+	}
+	
+	function add_item2() {
+		index+=1
+		var ul = document.getElementById("type2_pics");
+		
+		var new_p = document.createElement("li");
+		new_p.id = "pic"+index;
+		
+		var new_file = document.createElement("input");
+		new_file.type = "file"
+		new_file.name = "pic_"+index;
+		
+		var new_content = document.createElement("input");
+		new_content.type = "text"
+		new_content.name = "content_"+index;
+		new_content.className = "text-input medium-input";
+		
+		var new_button = document.createElement("input");
+		new_button.type = "button";
+		new_button.className = "button";
+		new_button.onclick = Function("remove_item2('pic"+index+"')");
+		new_button.value = "删除该条";
+		
+		new_p.appendChild(new_file);
+		new_p.appendChild(new_content);
+		new_p.appendChild(new_button);
+		
+		ul.appendChild(new_p);
+		return false;
+	}
+	
+	function remove_item(item) {
+		var ul = document.getElementById("type1_pics");
+		var p = document.getElementById(item);
+		ul.removeChild(p);
+	}
+	
+	function remove_item2(item) {
+		var ul = document.getElementById("type2_pics");
+		var p = document.getElementById(item);
+		ul.removeChild(p);
+	}
+	
 </script>
 </head>
 <body>
@@ -30,17 +102,21 @@
 <ul id="cats" class="shortcut-buttons-set">
 	<%
 	cats = Mygift::Cat.all
-	select_cat = Mygift::Cat.find_by_id session[:select_cat_id]
-	select_cat = cats[0] unless select_cat
+	id = session[:select_cat_id]
+	if id
+		select_cat = Mygift::Cat.find(session[:select_cat_id]) 
+	else
+		select_cat = cats[0]
+	end
 	%>
 	<%cats.each do |cat|%>
 		<li>
-			<a class="shortcut-button" href="/web/select/?id=<%=cat.id%>"><span> <img
+			<a class="shortcut-button" href="/web/main?id=<%=cat.id%>"><span> <img
 			src="/images/icons/pencil_48.png" alt="icon" />
 			<br />
 			<%=cat.name%>
 			</span></a>
-			<form action="/cats/delete" method="get">
+			<form action="/web/cats/delete" method="get">
 			<input type="hidden" name="id" value=<%=cat.id%>/>
 			&nbsp;&nbsp;&nbsp;<input type="submit" value="删除"/>
 		</form>
@@ -65,15 +141,19 @@
 				<a href="#tab1" class="default-tab">纯文本新闻</a>
 			</li>
 			<li>
-				<a href="#tab2" class="default-tab">文本带图片新闻</a>
+				<a href="#tab2" class="default-tab">纯图片新闻</a>
+			</li>
+			<li>
+				<a href="#tab3" class="default-tab">文本带图片新闻</a>
 			</li>
 		</ul>
 		<div class="clear"></div>
 	</div>
 	<!-- End .content-box-header -->
 	<div class="content-box-content">
+		<!-- 纯文本新闻-->
 		<div class="tab-content" class="default-tab" id="tab1">
-			<form action="/news/insert" method="post" enctype="multipart/form-data" >
+			<form action="/web/news/add" method="post" enctype="multipart/form-data" >
 				<fieldset>
 					<p>
 						<label>标题</label>
@@ -83,7 +163,6 @@
 					<p>
 						<label>摘要</label>
 						<input class="text-input large-input" type="text"
-
 						id="large-input" name="abs" />
 					</p>
 					<p>
@@ -96,13 +175,13 @@
 						<input type="checkbox" name="is_head"/>上头版吗？
 						<input type="file" name="icon" title="标题图片"/>
 					</p>
-						<input type="hidden" name="news_type" value="0" />
 					<p>
 						<label>新闻内容</label>
-						<textarea class="text-input textarea wysiwyg" id="textarea" name="content" cols="79" rows="15"></textarea>
+						<textarea class="text-input textarea wysiwyg" id="textarea" name="content" cols="40" rows="30"></textarea>
 					</p>
 					<p>
 						<input type="hidden" value="<%=select_cat.id%>" name="cat_id"/>
+						<input type="hidden" value="0" name="type"/>
 						<input class="button" type="submit" value="Submit" />
 					</p>
 				</fieldset>
@@ -110,20 +189,14 @@
 				<!-- End .clear -->
 			</form>
 		</div>
-		<!-- 图片带文字编辑 -->
+		<!-- 纯图片新闻 -->
 		<div class="tab-content" class="default-tab" id="tab2">
-			<form action="/news/insert" method="post" enctype="multipart/form-data" >
+			<form action="/web/news/add" method="post" enctype="multipart/form-data" >
 				<fieldset>
 					<p>
 						<label>标题</label>
-						<input class="text-input small-input" type="text"
+						<input class="text-input medium-input" type="text"
 						id="small-input" name="title" />
-					</p>
-					<p>
-						<label>摘要</label>
-						<input class="text-input large-input" type="text"
-
-						id="large-input" name="abs" />
 					</p>
 					<p>
 						<label>来源</label>
@@ -135,13 +208,64 @@
 						<input type="checkbox" name="is_head"/>上头版吗？
 						<input type="file" name="icon" title="标题图片"
 					</p>
-						<input type="hidden" name="news_type" value="1" />
+					<ul id="type1_pics">
+						<li id="pic0">
+							<input type="file" name="pic_0"/>
+							<input type="text" class="text-input medium-input" name="content_0"/>
+							<input class="button" type="button" onclick="return remove_item('pic0')" value="删除该条"/>
+						</li>
+					</ul>
+					<input class="button" type="button" onclick="return add_item()" value="增加"/>
+					<input type="hidden" value="<%=select_cat.id%>" name="cat_id"/>
+					<input type="hidden" name="type" value="1" />
 					<p>
-						<label>新闻内容</label>
-						<textarea class="text-input textarea wysiwyg" id="textarea" name="content" cols="79" rows="15"></textarea>
+						<input class="button" type="submit" value="Submit" />
+					</p>
+				</fieldset>
+				<div class="clear"></div>
+				<!-- End .clear -->
+			</form>
+		</div>
+		
+		<!-- 文字加图片 -->
+		<div class="tab-content" class="default-tab" id="tab3">
+			<form action="/web/news/add" method="post" enctype="multipart/form-data" >
+				<fieldset>
+					<p>
+						<label>标题</label>
+						<input class="text-input small-input" type="text"
+						id="small-input" name="title" />
 					</p>
 					<p>
-						<input type="hidden" value="<%=select_cat.id%>" name="cat_id"/>
+						<label>摘要</label>
+						<input class="text-input large-input" type="text"
+						id="large-input" name="abs" />
+					</p>
+					<p>
+						<label>来源</label>
+						<input class="text-input small-input" type="text"
+						id="small-input" name="come_from" />
+					</p>
+					<p>
+						<input type="checkbox" name="is_push"/>推送吗？
+						<input type="checkbox" name="is_head"/>上头版吗？
+						<input type="file" name="icon" title="标题图片"/>
+					</p>
+					<p>
+						<label>新闻内容</label>
+						<textarea class="text-input textarea wysiwyg" id="textarea" name="content" cols="40" rows="30"></textarea>
+					</p>
+					<ul id="type2_pics">
+						<li id="pic0">
+							<input type="file" name="pic_0"/>
+							<input type="text" class="text-input medium-input" name="content_0"/>
+							<input class="button" type="button" onclick="return remove_item2('pic0')" value="删除该条"/>
+						</li>
+					</ul>
+					<input class="button" type="button" onclick="return add_item2()" value="增加"/>
+					<input type="hidden" value="<%=select_cat.id%>" name="cat_id"/>
+					<input type="hidden" name="type" value="1" />
+					<p>
 						<input class="button" type="submit" value="Submit" />
 					</p>
 				</fieldset>

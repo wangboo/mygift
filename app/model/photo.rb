@@ -1,3 +1,4 @@
+#该类暂时被废弃，被news中的photos字段代替
 module Mygift
   class Photo
     include Mongoid::Document

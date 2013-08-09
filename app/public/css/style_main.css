@@ -733,7 +733,7 @@ body#login {
 
 /*************** jQuery WYSIWYG ***************/
 
-div.wysiwyg { border: 1px solid #cccccc; padding: 5px; background-color: #ffffff; width: 97.5% !important; }
+div.wysiwyg { border: 1px solid #cccccc; padding: 5px; background-color: #ffffff; width: 40.5% !important; }
 div.wysiwyg * { margin: 0; padding: 0; }
 
 div.wysiwyg ul.panel { border-bottom: 1px solid #cccccc; float: left; width: 100%; padding: 0 0 5px 0; }
@@ -788,4 +788,4 @@ div.wysiwyg ul.panel li a.removeFormat { background-position: -80px -64px; }
 
 div.wysiwyg ul.panel li a.empty { background-position: -64px -80px; }
 
-div.wysiwyg iframe { border: 0; margin: 5px 0 0 0; clear: left; width: 97.5% !important; }
+div.wysiwyg iframe { border: 0; margin: 5px 0 0 0; clear: left; width: 95.5% !important; }

@@ -15,12 +15,13 @@ module Mygift
     #是否推送该条新闻
     field :is_push, type: Boolean, default: false
     field :publish_time, type: Time, default: ->{Time.now}
+    field :photos, type: Hash
     #种类
     belongs_to :cat
     #回复的帖子
     has_many :cards
     #关联的图片信息
-    has_many :photos
+    # has_many :photos
     
     #获的头版的基本信息 hash
     def head_base
@@ -34,13 +35,12 @@ module Mygift
     
     #获取该条新闻的详细信息
     def info_json
-      hash = Hash.new
-      hash[:id] = id
+      hash = {id: id, icon: icon, title: title, time: publish_time.to_i, type: type}
       hash[:content] = content
       hash[:come_from] = come_from
-      hash[:mount] = carts.size
+      hash[:mount] = cards.size
       #查询出所有图片信息
-      hash[:photo] = photos.to_json
+      hash[:photo] = photos
       hash.to_json
     end
     

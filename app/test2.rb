@@ -1,1 +1,5 @@
-puts "hello" if "/android/hello".match(/^\/android\/.*$/)
+hash = {}
+hash.methods.each do |name|
+  puts name 
+end
+

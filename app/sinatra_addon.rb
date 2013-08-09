@@ -18,7 +18,6 @@ module Mygift
       end
       File.open(filename, "r") do |file|
         class_eval file.read
-        file.close
       end
     end
   end

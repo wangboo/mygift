@@ -4,11 +4,10 @@ get("/android/cat") do
   Cat.all.each do |cat|
     list << cat.name
   end
-  list
+  list.to_json
 end
 
 #获取新闻首页内容
-#
 post("/android/cat") do
   return error("请求参数不包含name") unless params[:name]
   name = Base64.decode64(params[:name])
@@ -35,5 +34,11 @@ post("/android/cat") do
   end
   result[:news] = bodies_list
   result.to_json
+end
+
+#删除新闻
+post("/web/cat/delete") do
+  Cat.delete(params[:id])
+  
 end
 

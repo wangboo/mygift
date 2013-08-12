@@ -38,7 +38,14 @@ end
 
 #删除新闻
 post("/web/cat/delete") do
-  Cat.delete(params[:id])
-  
+  cat = Cat.find(params[:id])
+  cat.news.delete
+  cat.delete if cat
+  erb :main
+end
+
+post("/web/cat/add") do
+  Cat.find_or_create_by(name: params[:name])
+  erb :main
 end
 

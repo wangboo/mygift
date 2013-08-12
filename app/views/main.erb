@@ -116,16 +116,16 @@
 			<br />
 			<%=cat.name%>
 			</span></a>
-			<form action="/web/cat/delete" method="get">
-			<input type="hidden" name="id" value=<%=cat.id%>/>
+			<form action="/web/cat/delete" method="post">
+			<input type="hidden" name="id" value="<%=cat.id%>"/>
 			&nbsp;&nbsp;&nbsp;<input class="button" type="submit" value="删除"/>
 		</form>
 		</li>
 	<%end%>
 	<li>
-		<form action="/web/cat/add" method="get">
+		<form action="/web/cat/add" method="post">
 			<input type="text" name="name"/>
-			<input type="submit" value="添加"/>
+			<input class="button" type="submit" value="添加"/>
 		</form>
 	</li>
 </ul>
@@ -141,10 +141,10 @@
 				<a href="#tab1" class="default-tab">纯文本新闻</a>
 			</li>
 			<li>
-				<a href="#tab2" class="default-tab">纯图片新闻</a>
+				<a href="#tab2">纯图片新闻</a>
 			</li>
 			<li>
-				<a href="#tab3" class="default-tab">文本带图片新闻</a>
+				<a href="#tab3">文本带图片新闻</a>
 			</li>
 		</ul>
 		<div class="clear"></div>

@@ -1,7 +1,7 @@
 #encoding: utf-8
 $app_path = Dir.pwd
 $pro_path = Dir.pwd.gsub(/(.*\/)/).first
-$res_path = "http://192.168.0.104:4567/res/"
+$adress = "http://localhost:3000"
 
 require "mongoid"
 require 'sinatra'
@@ -63,6 +63,6 @@ module Mygift
     end
     
   end
-  Rack::Handler::WEBrick.run App, :Port=>3000
+  Rack::Handler::WEBrick.run App, Port: 3000
 end
 

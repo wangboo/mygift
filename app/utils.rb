@@ -16,6 +16,15 @@ module Mygift
       save_file.gsub("./public", "")
     end
     
+    def delete_file name
+      begin
+        File.delete("./public"+name)
+      rescue
+        return false
+      end
+      true
+    end
+    
     def unique_id
       begin
         @@mutex.lock

@@ -1,0 +1,93 @@
+<html>
+<head>
+<link rel="stylesheet" href="/css/reset.css" type="text/css" media="screen" />
+<!-- Main Stylesheet -->
+<link rel="stylesheet" href="/css/style_main.css" type="text/css" media="screen" />
+<!-- Invalid Stylesheet. This makes stuff look pretty. Remove it if you want the CSS completely valid -->
+<link rel="stylesheet" href="/css/invalid.css" type="text/css" media="screen" />
+<!--                       Javascripts                       -->
+<!-- jQuery -->
+<script type="text/javascript" src="/scripts/jquery-1.3.2.min.js"></script>
+<!-- jQuery Configuration -->
+<script type="text/javascript" src="/scripts/simpla.jquery.configuration.js"></script>
+<!-- Facebox jQuery Plugin -->
+<script type="text/javascript" src="/scripts/facebox.js"></script>
+<!-- jQuery WYSIWYG Plugin -->
+<script type="text/javascript" src="/scripts/jquery.wysiwyg.js"></script>
+<!-- jQuery Datepicker Plugin -->
+<script type="text/javascript" src="/scripts/jquery.datePicker.js"></script>
+<script type="text/javascript" src="/scripts/jquery.date.js"></script>
+<script type="text/javascript">
+	
+</script>
+</head>
+<body>
+	<!-- Page Head -->
+<h2>MG资讯后台</h2>
+<p id="page-intro">
+	你可以编辑站台信息
+</p>
+<ul id="cats" class="shortcut-buttons-set">
+	<%
+	cats = Mygift::Cat.all
+	if session[:select_cat_id]
+		select_cat = Mygift::Cat.find(session[:select_cat_id])
+	else
+		select_cat = cats[0]
+	end
+	page = request[:page] || 0
+	page = page.to_i
+	start_index = page * 10
+	end_index = start_index + 10
+	puts "get #{start_index} to #{end_index}"
+	news_10 = select_cat.news.desc(:publish_time)[start_index...end_index]
+	%>
+	<%cats.each do |cat|%>
+		<li>
+			<a class="shortcut-button" href="/web/news/delete?id=<%=cat.id%>"><span> <img
+			src="/images/icons/pencil_48.png" alt="icon" />
+			<br />
+			<%=cat.name%>
+			</span></a>
+		</li>
+	<%end%>
+</ul>
+<!-- End .shortcut-buttons-set -->
+<div class="clear"></div>
+<!-- End .clear -->
+<div class="content-box">
+	<!-- Start Content Box -->
+	<div class="content-box-header">
+		<h3><%=select_cat.name%></h3>
+		<ul class="content-box-tabs">
+			<li>
+				<a href="#tab1" class="default-tab">删除新闻</a>
+			</li>
+		</ul>
+		<div class="clear"></div>
+	</div>
+	<!-- End .content-box-header -->
+	<div class="content-box-content">
+		<!-- 纯文本新闻-->
+		<div class="tab-content" class="default-tab" id="tab1">
+			<table><%news_10.each do |news|%>
+			<form action="/web/news/delete/<%=news.id%>" method="post" enctype="text/plain" >
+				<tr>
+					<td><img src="<%=news.icon_url%>"/></td>
+					<td width="400"><label><%=news.title%></label></td>
+					<td>类型：<%=news.type_chinese%></td>
+					<td><input type="submit" class="button" value="删除"/></td>
+				</tr>
+				<div class="clear"></div>
+			</form>
+			<%end%></table>
+				<!-- End .clear -->
+		</div>
+	</div>
+	<!-- End .content-box-content -->
+</div>
+<!-- End .content-box -->
+
+</body>
+</html>
+

@@ -11,7 +11,11 @@ Mongoid.load!("../config/mongo_config.yml")
   # end
 # end
 module Mygift
-  News.all.each do |news|
-    puts news.info_json
+  cat = Cat.create(name: "test")
+  (1..10).each do |i|
+    n = News.new(title: "n"+i)
+    n.cat = cat
+    n.save
   end
+  
 end

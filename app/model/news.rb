@@ -1,3 +1,4 @@
+#encoding: utf-8
 module Mygift
   #新闻
   class News
@@ -42,6 +43,18 @@ module Mygift
       #查询出所有图片信息
       hash[:photo] = photos
       hash.to_json
+    end
+    
+    def icon_url
+      return $adress + icon if icon
+      return $adress + "/adv0.jpg"
+    end
+    
+    def type_chinese
+      return "普通新闻" if id == 0
+      return "图片集"    if id == 1
+      return "普通新闻+图片集" if id == 2
+      return "未知的新闻类型" 
     end
     
   end
